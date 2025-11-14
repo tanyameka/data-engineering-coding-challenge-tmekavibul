@@ -1,0 +1,15 @@
+CREATE OR REPLACE TABLE dim_products AS
+SELECT DISTINCT
+    PRODUCT_ID,
+    PRODUCT_NAME,
+    CATEGORY,
+    COALESCE(NULLIF(price, 'NULL'),0)::number AS price,--turn to INT and remove NULL strings and replace with 0
+    SUPPLIER_ID,
+    COALESCE(STOCK_QUANTITY,0) as STOCK_QUANTITY, -- replace null with 0
+    COALESCE(
+        TRY_TO_DATE(LAST_UPDATED),
+        TRY_TO_DATE(LAST_UPDATED, 'Mon DD YYYY'),
+        TRY_TO_DATE(LAST_UPDATED, 'YYYY/MM/DD'),
+        TRY_TO_DATE(LAST_UPDATED, 'MM-DD-YYYY')
+    ) AS LAST_UPDATED, -- format date
+FROM SOURCES.TEST_DATA.PRODUCTS;

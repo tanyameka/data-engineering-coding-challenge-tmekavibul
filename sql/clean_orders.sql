@@ -7,7 +7,7 @@ SELECT DISTINCT
         TRY_TO_DATE(c3, 'Mon DD YYYY'),
         TRY_TO_DATE(c3, 'YYYY/MM/DD'),
         TRY_TO_DATE(c3, 'MM-DD-YYYY')
-    ) AS LAST_UPDATED, 
+    ) AS ORDER_DATE, 
     COALESCE(NULLIF(c4, 'NULL'),0)::float AS order_total,
     c5 AS status,
     c6 AS payment_method

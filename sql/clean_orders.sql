@@ -9,7 +9,7 @@ SELECT DISTINCT
         TRY_TO_DATE(c3, 'MM-DD-YYYY')
     ) AS ORDER_DATE, 
     COALESCE(NULLIF(c4, 'NULL'),0)::float AS order_total,
-    c5 AS status,
+    COALESCE(c5,'UNKNOWN') AS status,
     c6 AS payment_method
 FROM SOURCES.TEST_DATA.ORDERS
 WHERE c1 <> 'order_id';

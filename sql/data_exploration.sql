@@ -19,6 +19,16 @@ GROUP BY
 C1,C2,C3,C4,C5,C6
 HAVING COUNT(*) > 1
 
+--Order_date formatting (8)
+SELECT 
+    SUM(CASE WHEN TRY_TO_DATE(C3) IS NULL THEN 1 ELSE 0 END) AS unformatted
+FROM SOURCES.TEST_DATA.ORDERS;
+
+--Order_total NULL strings (3)
+SELECT * FROM SOURCES.TEST_DATA.ORDERS
+WHERE TRY_TO_NUMBER(C4) IS NULL 
+  AND C4 IS NOT NULL
+
 
 
 -------------------------------CUSTOMERS-------------------------------
@@ -47,6 +57,16 @@ STATE,
 ZIP,
 LOYALTY_STATUS
 HAVING COUNT(*) > 1
+
+--Unformatted phone (9)
+SELECT *
+FROM SOURCES.TEST_DATA.CUSTOMERS
+WHERE REGEXP_REPLACE(PHONE, '[^0-9]', '') != PHONE;
+
+--Unformatted email (3)
+SELECT *
+FROM SOURCES.TEST_DATA.CUSTOMERS
+WHERE email != LOWER(email);
 
 
 -------------------------------PRODUCTS-------------------------------
@@ -96,4 +116,10 @@ UNIT_PRICE,
 DISCOUNT_PERCENT
 HAVING COUNT(*) > 1
 
-
+--Discount percent and unit price
+SELECT 
+    SUM(CASE WHEN unit_price IS NULL THEN 1 ELSE 0 END) AS null_unit_price, --2
+    SUM(CASE WHEN unit_price = '0' THEN 1 ELSE 0 END) AS zero_unit_price, --0
+    SUM(CASE WHEN discount_percent IS NULL THEN 1 ELSE 0 END) AS null_discount_percent, --8
+    SUM(CASE WHEN discount_percent = '0' THEN 1 ELSE 0 END) AS zero_discount_percent --28
+FROM SOURCES.TEST_DATA.ORDER_ITEMS;
